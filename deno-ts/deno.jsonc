@@ -1,4 +1,4 @@
 {
     "fmt": { "indentWidth": 4 },
-    "workspace": ["./server", "./client", "./shared"]
+    "workspace": ["./surface", "./agent", "./shared"]
 }

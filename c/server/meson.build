@@ -1,1 +1,0 @@
-executable('server', 'main.c')

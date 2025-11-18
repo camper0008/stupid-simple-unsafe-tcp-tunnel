@@ -1,1 +1,0 @@
-executable('client', 'main.c')
