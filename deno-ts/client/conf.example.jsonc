@@ -1,0 +1,15 @@
+{
+    "connections": [
+        {
+            "secret": "abcd",
+            "server": {
+                "hostname": "localhost",
+                "port": 4200
+            },
+            "forward_to": {
+                "hostname": "localhost",
+                "port": 4300
+            }
+        }
+    ]
+}
