@@ -1,0 +1,1 @@
+executable('client', 'main.c')
