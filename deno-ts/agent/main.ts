@@ -3,7 +3,7 @@ import { TextEnDe } from "@tunneltent/shared";
 
 async function spawnClient(info: Connection) {
     const operator = await Deno.connect({ ...info.server });
-    operator.write(TextEnDe.encode(info.secret + ";"));
+    operator.write(TextEnDe.encode(info.secret));
     const forwardTo = await Deno.connect({ ...info.forwardTo });
     console.log(
         `middlemanning between ${info.server.hostname}:${info.server.port} <-> :${info.forwardTo.hostname}:${info.forwardTo.port}`,
@@ -16,7 +16,7 @@ async function spawnClient(info: Connection) {
 async function handleThread(info: Connection) {
     const masterOperator = await Deno.connect({ ...info.server });
     await masterOperator.write(
-        TextEnDe.encode(info.secret + ";"),
+        TextEnDe.encode(info.secret),
     );
 
     const buffer = new Uint8Array(256);

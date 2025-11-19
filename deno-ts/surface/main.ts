@@ -7,9 +7,8 @@ async function seekOperator(listener: Deno.TcpListener, secret: string) {
         operator = await listener.accept();
         const buffer = new Uint8Array(256);
         await operator.read(buffer);
-        const decoded = TextEnDe.decode(buffer.slice(0, secret.length + 1));
-        const isSecret = decoded == secret + ";";
-        if (!isSecret) {
+        const decoded = TextEnDe.decode(buffer.slice(0, secret.length));
+        if (decoded !== secret) {
             operator.close();
             operator = undefined;
             continue;
