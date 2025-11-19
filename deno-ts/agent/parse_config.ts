@@ -2,7 +2,7 @@ import * as z from "zod";
 
 const Connection = z.strictObject({
     secret: z.string(),
-    server: z.strictObject({
+    surface: z.strictObject({
         hostname: z.string(),
         port: z.int(),
     }),
@@ -12,7 +12,7 @@ const Connection = z.strictObject({
     }),
 }).transform((x) => ({
     secret: x.secret,
-    server: x.server,
+    surface: x.surface,
     forwardTo: x.forward_to,
 }));
 

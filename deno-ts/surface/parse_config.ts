@@ -2,12 +2,12 @@ import * as z from "zod";
 
 const Connection = z.strictObject({
     secret: z.string(),
-    operative_port: z.int(),
-    client_port: z.int(),
+    operator_port: z.int(),
+    surface_port: z.int(),
 }).transform((x) => ({
     secret: x.secret,
-    operativePort: x.operative_port,
-    clientPort: x.client_port,
+    operatorPort: x.operator_port,
+    surfacePort: x.surface_port,
 }));
 
 const Config = z.strictObject({

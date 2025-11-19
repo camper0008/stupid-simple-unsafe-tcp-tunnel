@@ -1,7 +1,10 @@
 import { Connection, parseConfig } from "./parse_config.ts";
 import { TextEnDe } from "@tunneltent/shared";
 
-async function seekOperator(listener: Deno.TcpListener, secret: string) {
+async function acquireAgentConnection(
+    listener: Deno.TcpListener,
+    secret: string,
+): Promise<Deno.Conn<Deno.Addr>> {
     let operator;
     while (operator === undefined) {
         operator = await listener.accept();
@@ -20,38 +23,41 @@ async function seekOperator(listener: Deno.TcpListener, secret: string) {
 async function establishConnection(info: Connection) {
     const operatorListener = Deno.listen({
         hostname: "localhost",
-        port: info.operativePort,
+        port: info.operatorPort,
     });
 
-    const clientListener = Deno.listen({
+    const surfaceListener = Deno.listen({
         hostname: "localhost",
-        port: info.clientPort,
+        port: info.surfacePort,
     });
 
     console.log(
-        `listening on operator:${info.operativePort} & client:${info.clientPort}`,
+        `listening on operator:${info.operatorPort} & surface:${info.surfacePort}`,
     );
 
-    const masterOperator = await seekOperator(
+    const operatorConnection = await acquireAgentConnection(
         operatorListener,
         info.secret,
     );
 
-    console.log("master operator found");
+    console.log("operator found");
 
     while (true) {
-        const client = await clientListener.accept();
-        console.log("client connected");
-        const bytesWritten = await masterOperator.write(
+        const surface = await surfaceListener.accept();
+        console.log("surface connected");
+        const bytesWritten = await operatorConnection.write(
             TextEnDe.encode("more_clients"),
         );
         if (bytesWritten === null) {
             break;
         }
-        const slaveOperator = await seekOperator(operatorListener, info.secret);
-        console.log("slave operator found");
-        client.readable.pipeTo(slaveOperator.writable);
-        slaveOperator.readable.pipeTo(client.writable);
+        const agent = await acquireAgentConnection(
+            operatorListener,
+            info.secret,
+        );
+        console.log("agent connection found");
+        surface.readable.pipeTo(agent.writable);
+        agent.readable.pipeTo(surface.writable);
     }
     console.log("master operator connection severed");
 }

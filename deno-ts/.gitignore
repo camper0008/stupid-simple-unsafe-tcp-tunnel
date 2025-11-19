@@ -1,2 +1,2 @@
-server/conf.jsonc
-client/conf.jsonc
+surface/conf.jsonc
+agent/conf.jsonc

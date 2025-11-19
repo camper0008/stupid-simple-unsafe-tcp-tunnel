@@ -10,12 +10,12 @@
   },
   "workspace": {
     "members": {
-      "client": {
+      "agent": {
         "dependencies": [
           "npm:zod@^4.1.12"
         ]
       },
-      "server": {
+      "surface": {
         "dependencies": [
           "npm:zod@^4.1.12"
         ]

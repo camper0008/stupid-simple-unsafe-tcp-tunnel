@@ -2,7 +2,7 @@
     "connections": [
         {
             "secret": "abcd",
-            "server": {
+            "surface": {
                 "hostname": "localhost",
                 "port": 4200
             },

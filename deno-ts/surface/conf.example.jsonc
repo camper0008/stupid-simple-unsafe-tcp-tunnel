@@ -2,8 +2,8 @@
     "connections": [
         {
             "secret": "abcd",
-            "operative_port": 4200,
-            "client_port": 1080
+            "operator_port": 4200,
+            "surface_port": 1080
         }
     ]
 }

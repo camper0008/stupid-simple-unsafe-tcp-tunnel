@@ -1,33 +1,33 @@
 import { Connection, parseConfig } from "./parse_config.ts";
 import { TextEnDe } from "@tunneltent/shared";
 
-async function spawnClient(info: Connection) {
-    const operator = await Deno.connect({ ...info.server });
-    operator.write(TextEnDe.encode(info.secret));
+async function spawnProxy(info: Connection) {
+    const surface = await Deno.connect({ ...info.surface });
+    surface.write(TextEnDe.encode(info.secret));
     const forwardTo = await Deno.connect({ ...info.forwardTo });
     console.log(
-        `middlemanning between ${info.server.hostname}:${info.server.port} <-> :${info.forwardTo.hostname}:${info.forwardTo.port}`,
+        `middlemanning between ${info.surface.hostname}:${info.surface.port} <-> :${info.forwardTo.hostname}:${info.forwardTo.port}`,
     );
 
-    operator.readable.pipeTo(forwardTo.writable);
-    forwardTo.readable.pipeTo(operator.writable);
+    surface.readable.pipeTo(forwardTo.writable);
+    forwardTo.readable.pipeTo(surface.writable);
 }
 
 async function handleThread(info: Connection) {
-    const masterOperator = await Deno.connect({ ...info.server });
-    await masterOperator.write(
+    const operatorConnection = await Deno.connect({ ...info.surface });
+    await operatorConnection.write(
         TextEnDe.encode(info.secret),
     );
 
     const buffer = new Uint8Array(256);
     while (true) {
-        const ret = await masterOperator.read(buffer);
+        const ret = await operatorConnection.read(buffer);
         if (ret === null) {
             break;
         }
         const text = TextEnDe.decode(buffer);
         if (text.slice(0, "more_clients".length) === "more_clients") {
-            spawnClient(info);
+            spawnProxy(info);
         } else {
             console.log(
                 `received invalid message '${text}' (${text.length})`,
