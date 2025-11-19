@@ -1,0 +1,1 @@
+executable('ssu-tt-surface', 'main.cpp')
