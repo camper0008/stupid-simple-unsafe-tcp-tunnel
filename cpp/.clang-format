@@ -1,7 +1,7 @@
 Language: Cpp
 BasedOnStyle: WebKit
 IndentWidth: 4
-SortIncludes: true
+SortIncludes: false
 InsertBraces: true
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AllowShortLoopsOnASingleLine: true

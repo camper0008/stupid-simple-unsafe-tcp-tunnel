@@ -1,0 +1,23 @@
+version = 1
+revision = 2
+requires-python = ">=3.13"
+
+[[package]]
+name = "cpp"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "meson" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "meson", specifier = ">=1.9.1" }]
+
+[[package]]
+name = "meson"
+version = "1.9.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/48/d8/6c1dd1c740b7d5fd73a6ad67900a09e3dd6642013f58fa9e22ae6faaffc7/meson-1.9.1.tar.gz", hash = "sha256:4e076606f2afff7881d195574bddcd8d89286f35a17b4977a216f535dc0c74ac", size = 5083044, upload-time = "2025-11-13T00:38:38.509Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9c/07/b48592d325cb86682829f05216e4efb2dc881762b8f1bafb48b57442307a/meson-1.9.1-py3-none-any.whl", hash = "sha256:f824ab770c041a202f532f69e114c971918ed2daff7ea56583d80642564598d0", size = 1030356, upload-time = "2025-09-22T18:39:37.458Z" },
+]

@@ -1,16 +1,13 @@
-#include "tcp.hpp"
-#include "result.hpp"
-#include <cstddef>
-#include <cstdint>
-
+#ifdef __linux
 template <typename T>
 using TcpResult = Result<T, std::string>;
 
 namespace {
-#include <arpa/inet.h>
-#include <netinet/ip.h>
 
-auto connection_fd_linux(std::string hostname, std::uint16_t port) -> TcpResult<size_t> {
+auto connection_fd(std::string hostname, std::uint16_t port) -> TcpResult<size_t> {
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        return TcpResult::Err("unable to initialize winsock!");
+    }
 
     int socket_fd = 0;
     if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -30,16 +27,10 @@ auto connection_fd_linux(std::string hostname, std::uint16_t port) -> TcpResult<
 
     return TcpResult<size_t>::Ok(socket_fd);
 }
-
-auto connection_fd(std::string hostname, std::uint16_t port) -> TcpResult<size_t> {
-    return connection_fd_linux(hostname, port);
 }
-}
-
-TcpConnection::TcpConnection(std::size_t fd)
-    : fd(fd) { }
 
 auto TcpConnection::connect(std::string hostname, std::uint16_t port) -> TcpResult<TcpConnection> {
     return connection_fd(hostname, port)
         .map<TcpConnection>([](auto x) { return TcpConnection(x); });
 }
+#endif
